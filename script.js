@@ -244,3 +244,135 @@ currentScreen =
 updateHMI();
 
 setInterval(updateHMI,3000);
+/* ==========================
+   FAULT-TOLERANT RUNTIME SYSTEM
+========================== */
+
+let runtimeFaultCount = 0;
+
+let faultHistory = [];
+
+let previousADC = null;
+
+function logFault(fault)
+{
+let timestamp =
+new Date().toLocaleTimeString();
+
+faultHistory.unshift(
+timestamp + " - " + fault
+);
+
+if(faultHistory.length > 5)
+{
+faultHistory.pop();
+}
+
+document.getElementById("faultLog")
+.innerHTML =
+faultHistory.join("<br>");
+}
+
+function updateRuntimeSystem()
+{
+let runtimeMode = "NORMAL";
+
+let sensorStatus = "CONNECTED";
+
+let adcStatus = "HEALTHY";
+
+let relayCheck = "MATCHED";
+
+let latestFault = "NONE";
+
+let adcReading =
+Math.floor(Math.random()*1024);
+
+let randomFault =
+Math.floor(Math.random()*100);
+
+if(randomFault < 5)
+{
+sensorStatus = "DISCONNECTED";
+
+runtimeMode = "DEGRADED";
+
+latestFault =
+"SENSOR DISCONNECTION";
+
+runtimeFaultCount++;
+
+logFault(latestFault);
+}
+else if(randomFault < 10)
+{
+adcStatus = "INVALID";
+
+runtimeMode = "DEGRADED";
+
+latestFault =
+"INVALID ADC VALUE";
+
+runtimeFaultCount++;
+
+logFault(latestFault);
+}
+else if(randomFault < 15)
+{
+relayCheck = "MISMATCH";
+
+runtimeMode = "FAILSAFE";
+
+latestFault =
+"RELAY MISMATCH";
+
+runtimeFaultCount++;
+
+logFault(latestFault);
+}
+else if(
+previousADC !== null &&
+adcReading === previousADC
+)
+{
+adcStatus = "FROZEN";
+
+runtimeMode = "FAILSAFE";
+
+latestFault =
+"ADC FROZEN";
+
+runtimeFaultCount++;
+
+logFault(latestFault);
+}
+
+if(runtimeFaultCount > 10)
+{
+runtimeMode = "SHUTDOWN";
+}
+
+document.getElementById("runtimeMode")
+.innerHTML = runtimeMode;
+
+document.getElementById("sensorStatus")
+.innerHTML = sensorStatus;
+
+document.getElementById("adcStatus")
+.innerHTML = adcStatus;
+
+document.getElementById("relayCheck")
+.innerHTML = relayCheck;
+
+document.getElementById("faultCount")
+.innerHTML = runtimeFaultCount;
+
+document.getElementById("latestFault")
+.innerHTML = latestFault;
+
+previousADC = adcReading;
+}
+
+updateRuntimeSystem();
+
+setInterval(updateRuntimeSystem,4000);
