@@ -376,3 +376,86 @@ previousADC = adcReading;
 updateRuntimeSystem();
 
 setInterval(updateRuntimeSystem,4000);
+/* ==========================
+   CLOUD TELEMETRY ARCHITECTURE
+========================== */
+
+let cloudConnected = true;
+
+let eventQueue = [];
+
+let lastCloudEvent = "NONE";
+
+function queueTelemetry(eventName)
+{
+eventQueue.push({
+time:new Date().toLocaleTimeString(),
+event:eventName
+});
+
+lastCloudEvent = eventName;
+}
+
+function updateCloudTelemetry()
+{
+let randomNetwork =
+Math.floor(Math.random()*100);
+
+let randomEvent =
+Math.floor(Math.random()*100);
+
+if(randomNetwork < 10)
+{
+cloudConnected = false;
+}
+else
+{
+cloudConnected = true;
+}
+
+if(randomEvent < 10)
+{
+queueTelemetry("VOLTAGE THRESHOLD");
+}
+else if(randomEvent < 15)
+{
+queueTelemetry("STATE CHANGE");
+}
+else if(randomEvent < 20)
+{
+queueTelemetry("ANOMALY DETECTED");
+}
+
+if(cloudConnected && eventQueue.length > 0)
+{
+eventQueue = [];
+}
+
+document.getElementById("cloudStatus")
+.innerHTML =
+cloudConnected
+? "CONNECTED"
+: "DISCONNECTED";
+
+document.getElementById("wifiSignal")
+.innerHTML =
+Math.floor(60 + Math.random()*40) + "%";
+
+document.getElementById("queuedEvents")
+.innerHTML =
+eventQueue.length;
+
+document.getElementById("lastCloudEvent")
+.innerHTML =
+lastCloudEvent;
+
+document.getElementById("syncStatus")
+.innerHTML =
+cloudConnected
+? "SYNCHRONIZED"
+: "WAITING FOR RECONNECT";
+}
+
+updateCloudTelemetry();
+
+setInterval(updateCloudTelemetry,3000);
