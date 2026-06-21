@@ -99,3 +99,8 @@ color:#00ff00;
 padding:15px;
 border-radius:10px;
 }
+#queuedEvents,
+#wifiSignal,
+#cloudStatus{
+font-weight:bold;
+}
