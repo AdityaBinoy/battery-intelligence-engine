@@ -208,6 +208,55 @@ Displays fault information and system state.
 ### Fault Override Mode
 
 When a critical fault occurs, the HMI automatically overrides normal screen rotation and displays fault information with highest priority.
+
+# Module 4: Fault-Tolerant Embedded Runtime System
+
+## Objective
+
+Develop a fault-tolerant runtime subsystem capable of detecting hardware and software failures while maintaining stable operation of healthy modules.
+
+## Features
+
+- Sensor disconnection detection
+- Invalid ADC value detection
+- Frozen ADC detection
+- Relay mismatch detection
+- Autonomous fault isolation
+- Runtime mode management
+- Structured fault logging
+- Recovery-oriented architecture
+
+## Runtime Modes
+
+### NORMAL
+System operating normally.
+
+### DEGRADED
+Non-critical fault detected.
+Healthy modules continue running.
+
+### FAILSAFE
+Critical fault detected.
+Protective actions activated.
+
+### SHUTDOWN
+Repeated critical faults detected.
+System enters safe shutdown state.
+
+## Fault Logging
+
+The system maintains timestamped fault logs and tracks fault history for diagnostic analysis.
+
+## Fault Types
+
+- Sensor Disconnection
+- Invalid ADC Reading
+- Frozen ADC Condition
+- Relay Mismatch
+
+## Recovery Strategy
+
+Faulty subsystems are isolated while healthy subsystems continue operating independently.
 ---
 
 ---
