@@ -180,18 +180,6 @@ The live dashboard displays:
 
 ---
 
-# Repository Structure
-
-```text
-battery-intelligence-engine
-
-├── index.html
-├── style.css
-├── script.js
-├── README.md
-└── assets
-```
-
 ---
 
 # Author
