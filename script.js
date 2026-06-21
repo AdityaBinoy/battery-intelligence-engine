@@ -1,63 +1,171 @@
-body{
-font-family:Segoe UI,sans-serif;
-background:#0f172a;
-color:white;
-margin:0;
-padding:20px;
+/* ==========================
+   BATTERY INTELLIGENCE ENGINE
+========================== */
+
+function updateBattery()
+{
+let cells=[];
+
+for(let i=0;i<4;i++)
+{
+cells.push(3.8 + Math.random()*0.4);
 }
 
-.container{
-max-width:1100px;
-margin:auto;
+document.getElementById("c1").innerHTML=cells[0].toFixed(2)+" V";
+document.getElementById("c2").innerHTML=cells[1].toFixed(2)+" V";
+document.getElementById("c3").innerHTML=cells[2].toFixed(2)+" V";
+document.getElementById("c4").innerHTML=cells[3].toFixed(2)+" V";
+
+let avg=cells.reduce((a,b)=>a+b,0)/4;
+let max=Math.max(...cells);
+let min=Math.min(...cells);
+
+let imbalance=((max-min)/avg)*100;
+
+let strongest=cells.indexOf(max)+1;
+let weakest=cells.indexOf(min)+1;
+
+let status="";
+let css="";
+
+if(imbalance<2)
+{
+status="Healthy";
+css="healthy";
+}
+else if(imbalance<5)
+{
+status="Minor Imbalance";
+css="minor";
+}
+else if(imbalance<10)
+{
+status="Critical Imbalance";
+css="critical";
+}
+else
+{
+status="Pack Failure";
+css="failure";
 }
 
-h1{
-text-align:center;
-margin-bottom:30px;
+document.getElementById("avg").innerHTML=avg.toFixed(2)+" V";
+document.getElementById("imb").innerHTML=imbalance.toFixed(2)+" %";
+document.getElementById("strong").innerHTML="Cell "+strongest;
+document.getElementById("weak").innerHTML="Cell "+weakest;
+document.getElementById("status").innerHTML=
+`<span class="${css}">${status}</span>`;
 }
 
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-gap:20px;
+/* ==========================
+   EVENT-DRIVEN SAFETY KERNEL
+========================== */
+
+let relayState=true;
+let buzzerState=false;
+let lastRelayChange=0;
+const relayLockTime=5000;
+let previousVoltage=4.0;
+
+function updateSafetyKernel()
+{
+let voltage=2.8 + Math.random()*1.8;
+
+let state="NORMAL";
+let lcd="SYSTEM NORMAL";
+
+const now=Date.now();
+
+let fluctuation=Math.abs(voltage-previousVoltage);
+
+let sensorFault=
+(voltage<0 || voltage>5 || isNaN(voltage));
+
+if(sensorFault)
+{
+state="SENSOR FAULT";
+lcd="SENSOR ANOMALY DETECTED";
+buzzerState=true;
+
+if(now-lastRelayChange>relayLockTime)
+{
+relayState=false;
+lastRelayChange=now;
+}
+}
+else if(voltage<3.0)
+{
+state="LOW VOLTAGE";
+lcd="LOW CELL VOLTAGE";
+buzzerState=true;
+
+if(now-lastRelayChange>relayLockTime)
+{
+relayState=false;
+lastRelayChange=now;
+}
+}
+else if(voltage>4.25)
+{
+state="OVER VOLTAGE";
+lcd="OVER VOLTAGE";
+buzzerState=true;
+
+if(now-lastRelayChange>relayLockTime)
+{
+relayState=false;
+lastRelayChange=now;
+}
+}
+else if(fluctuation>0.5)
+{
+state="RAPID FLUCTUATION";
+lcd="RAPID VOLTAGE CHANGE";
+buzzerState=true;
+
+if(now-lastRelayChange>relayLockTime)
+{
+relayState=false;
+lastRelayChange=now;
+}
+}
+else
+{
+state="NORMAL";
+lcd="SYSTEM NORMAL";
+buzzerState=false;
+
+if(now-lastRelayChange>relayLockTime)
+{
+relayState=true;
+}
 }
 
-.card{
-background:#1e293b;
-padding:20px;
-border-radius:15px;
-text-align:center;
-box-shadow:0 0 10px rgba(0,0,0,.4);
+document.getElementById("sysVoltage").innerHTML=
+voltage.toFixed(2)+" V";
+
+document.getElementById("relayStatus").innerHTML=
+relayState ? "ON" : "OFF";
+
+document.getElementById("buzzerStatus").innerHTML=
+buzzerState ? "ON" : "OFF";
+
+document.getElementById("kernelState").innerHTML=
+state;
+
+document.getElementById("lcdMessage").innerHTML=
+lcd;
+
+document.getElementById("relayProtection").innerHTML=
+(now-lastRelayChange<relayLockTime)
+? "ACTIVE"
+: "READY";
+
+previousVoltage=voltage;
 }
 
-.summary{
-margin-top:30px;
-background:#1e293b;
-padding:25px;
-border-radius:15px;
-}
+updateBattery();
+updateSafetyKernel();
 
-hr{
-margin:40px 0;
-border:1px solid #334155;
-}
-
-.healthy{
-color:#22c55e;
-font-weight:bold;
-}
-
-.minor{
-color:#eab308;
-font-weight:bold;
-}
-
-.critical{
-color:#f97316;
-font-weight:bold;
-}
-
-.failure{
-color:#ef4444;
-font-weight:bold;
-}
+setInterval(updateBattery,1000);
+setInterval(updateSafetyKernel,1000);
