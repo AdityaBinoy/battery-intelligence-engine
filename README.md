@@ -1,4 +1,4 @@
-# Battery Intelligence & Event-Driven Safety Protection Suite
+# Intelligent Battery Management & Telemetry Platform
 
 ## Overview
 
