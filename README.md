@@ -257,6 +257,55 @@ The system maintains timestamped fault logs and tracks fault history for diagnos
 ## Recovery Strategy
 
 Faulty subsystems are isolated while healthy subsystems continue operating independently.
+
+# Module 5: Intelligent Cloud Telemetry Architecture
+
+## Objective
+
+Design an event-driven IoT telemetry system that transmits data only when meaningful events occur rather than using fixed periodic updates.
+
+## Features
+
+- Event-driven telemetry transmission
+- State change reporting
+- Voltage threshold violation reporting
+- Anomaly-based telemetry
+- WiFi reconnect handling
+- Event queue synchronization
+- Signal quality monitoring
+- Asynchronous cloud communication
+- Network failure tolerance
+
+## Cloud Events
+
+### Voltage Threshold Violation
+Triggered when voltage exceeds configured limits.
+
+### State Change
+Triggered when system mode changes.
+
+### Anomaly Detection
+Triggered when abnormal behavior is detected.
+
+## Offline Operation
+
+When cloud connectivity is lost:
+
+- Embedded system continues operating
+- Events are queued locally
+- No data is lost
+
+## Reconnection Handling
+
+When connectivity returns:
+
+- Queued events are synchronized
+- Event queue is cleared
+- Cloud status restored
+
+## Telemetry Strategy
+
+Unlike traditional fixed-interval telemetry, this architecture only transmits important events, reducing bandwidth usage and cloud load.
 ---
 
 ---
