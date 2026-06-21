@@ -169,3 +169,78 @@ updateSafetyKernel();
 
 setInterval(updateBattery,1000);
 setInterval(updateSafetyKernel,1000);
+/* ==========================
+   INTELLIGENT EMBEDDED HMI
+========================== */
+
+let currentScreen = 0;
+
+const screens = [
+"BATTERY DATA",
+"ANALYTICS",
+"PROTECTION",
+"DIAGNOSTICS"
+];
+
+function updateHMI()
+{
+let screen = screens[currentScreen];
+
+let line1 = "";
+let line2 = "";
+
+if(screen === "BATTERY DATA")
+{
+line1 = "Live Battery Data";
+line2 = document.getElementById("avg").innerText;
+}
+else if(screen === "ANALYTICS")
+{
+line1 = "Battery Analytics";
+line2 = document.getElementById("imb").innerText;
+}
+else if(screen === "PROTECTION")
+{
+line1 = "Relay Status";
+line2 = document.getElementById("relayStatus").innerText;
+}
+else
+{
+line1 = "Diagnostics";
+line2 = document.getElementById("kernelState").innerText;
+}
+
+if(document.getElementById("kernelState").innerText !== "NORMAL")
+{
+screen = "FAULT OVERRIDE";
+
+line1 = "CRITICAL FAULT";
+
+line2 =
+document.getElementById("kernelState").innerText;
+
+document.getElementById("faultPriority")
+.innerHTML = "ACTIVE";
+}
+else
+{
+document.getElementById("faultPriority")
+.innerHTML = "NONE";
+}
+
+document.getElementById("screenName")
+.innerHTML = screen;
+
+document.getElementById("lcdLine1")
+.innerHTML = line1;
+
+document.getElementById("lcdLine2")
+.innerHTML = line2;
+
+currentScreen =
+(currentScreen + 1) % screens.length;
+}
+
+updateHMI();
+
+setInterval(updateHMI,3000);
