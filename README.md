@@ -194,22 +194,6 @@ battery-intelligence-engine
 
 ---
 
-# Live Demo
-
-Website:
-
-https://adityabinoy.github.io/battery-intelligence-engine/
-
-Repository:
-
-https://github.com/AdityaBinoy/battery-intelligence-engine
-
----
-
 # Author
 
 Aditya Binoy
-
-B.Tech Robotics & Artificial Intelligence
-
-Embedded Systems | Robotics | AI Engineering
