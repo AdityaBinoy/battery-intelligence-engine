@@ -1,101 +1,63 @@
-/* ==========================
-   EVENT-DRIVEN SAFETY KERNEL
-========================== */
-
-let relayState = true;
-let buzzerState = false;
-
-let lastRelayChange = 0;
-const relayLockTime = 5000;
-
-let previousVoltage = 4.0;
-
-function updateSafetyKernel()
-{
-let voltage = 2.8 + Math.random()*1.8;
-
-let state = "NORMAL";
-let lcd = "SYSTEM NORMAL";
-
-const now = Date.now();
-
-let fluctuation =
-Math.abs(voltage - previousVoltage);
-
-if(voltage < 3.0)
-{
-state = "LOW VOLTAGE";
-lcd = "LOW CELL VOLTAGE";
-
-if(now-lastRelayChange > relayLockTime)
-{
-relayState = false;
-lastRelayChange = now;
+body{
+font-family:Segoe UI,sans-serif;
+background:#0f172a;
+color:white;
+margin:0;
+padding:20px;
 }
 
-buzzerState = true;
-}
-else if(voltage > 4.25)
-{
-state = "OVER VOLTAGE";
-lcd = "OVER VOLTAGE";
-
-if(now-lastRelayChange > relayLockTime)
-{
-relayState = false;
-lastRelayChange = now;
+.container{
+max-width:1100px;
+margin:auto;
 }
 
-buzzerState = true;
-}
-else if(fluctuation > 0.5)
-{
-state = "RAPID FLUCTUATION";
-lcd = "RAPID VOLTAGE CHANGE";
-
-if(now-lastRelayChange > relayLockTime)
-{
-relayState = false;
-lastRelayChange = now;
+h1{
+text-align:center;
+margin-bottom:30px;
 }
 
-buzzerState = true;
-}
-else
-{
-state = "NORMAL";
-lcd = "SYSTEM NORMAL";
-buzzerState = false;
-
-if(now-lastRelayChange > relayLockTime)
-{
-relayState = true;
-}
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:20px;
 }
 
-document.getElementById("sysVoltage").innerHTML =
-voltage.toFixed(2)+" V";
-
-document.getElementById("relayStatus").innerHTML =
-relayState ? "ON" : "OFF";
-
-document.getElementById("buzzerStatus").innerHTML =
-buzzerState ? "ON" : "OFF";
-
-document.getElementById("kernelState").innerHTML =
-state;
-
-document.getElementById("lcdMessage").innerHTML =
-lcd;
-
-document.getElementById("relayProtection").innerHTML =
-(now-lastRelayChange < relayLockTime)
-? "ACTIVE"
-: "READY";
-
-previousVoltage = voltage;
+.card{
+background:#1e293b;
+padding:20px;
+border-radius:15px;
+text-align:center;
+box-shadow:0 0 10px rgba(0,0,0,.4);
 }
 
-updateSafetyKernel();
+.summary{
+margin-top:30px;
+background:#1e293b;
+padding:25px;
+border-radius:15px;
+}
 
-setInterval(updateSafetyKernel,1000);
+hr{
+margin:40px 0;
+border:1px solid #334155;
+}
+
+.healthy{
+color:#22c55e;
+font-weight:bold;
+}
+
+.minor{
+color:#eab308;
+font-weight:bold;
+}
+
+.critical{
+color:#f97316;
+font-weight:bold;
+}
+
+.failure{
+color:#ef4444;
+font-weight:bold;
+}
