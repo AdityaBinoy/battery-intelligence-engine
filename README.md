@@ -1,11 +1,8 @@
-# Intelligent Battery Management & Telemetry Platform
+# Enterprise Battery Management System (BMS) Suite
 
 ## Overview
 
-This project combines two automotive battery management modules:
-
-1. Adaptive Multi-Cell Battery Intelligence Engine
-2. Event-Driven Safety Protection Kernel
+A professional embedded Battery Management System integrating battery intelligence, safety protection, intelligent HMI diagnostics, fault-tolerant runtime management, cloud telemetry, and executive analytics.
 
 Together, these modules simulate the core monitoring and safety functions commonly used in Battery Management Systems (BMS) for electric vehicles, energy storage systems, and embedded battery-powered applications.
 
