@@ -459,3 +459,127 @@ cloudConnected
 updateCloudTelemetry();
 
 setInterval(updateCloudTelemetry,3000);
+/* ==========================
+   EXECUTIVE DASHBOARD
+========================== */
+
+let voltageHistory = [];
+
+function updateExecutiveDashboard()
+{
+let avgVoltage =
+parseFloat(
+document.getElementById("avg")
+.innerText
+);
+
+if(!isNaN(avgVoltage))
+{
+voltageHistory.push(avgVoltage);
+
+if(voltageHistory.length > 20)
+{
+voltageHistory.shift();
+}
+}
+
+let riskLevel = "LOW";
+
+let riskClass = "low-risk";
+
+let recommendation =
+"System operating normally";
+
+let faults =
+runtimeFaultCount || 0;
+
+if(faults > 3)
+{
+riskLevel = "MEDIUM";
+
+riskClass = "medium-risk";
+
+recommendation =
+"Monitor battery condition";
+}
+
+if(faults > 7)
+{
+riskLevel = "HIGH";
+
+riskClass = "high-risk";
+
+recommendation =
+"Maintenance recommended";
+}
+
+let healthScore =
+Math.max(
+100 - (faults * 5),
+50
+);
+
+document.getElementById("healthScore")
+.innerHTML =
+healthScore + "%";
+
+document.getElementById("riskLevel")
+.innerHTML =
+`<span class="${riskClass}">
+${riskLevel}
+</span>`;
+
+document.getElementById("totalFaults")
+.innerHTML =
+faults;
+
+document.getElementById("dashboardCloud")
+.innerHTML =
+cloudConnected
+? "ONLINE"
+: "OFFLINE";
+
+document.getElementById("recommendation")
+.innerHTML =
+recommendation;
+
+if(voltageHistory.length > 1)
+{
+let first =
+voltageHistory[0];
+
+let last =
+voltageHistory[
+voltageHistory.length-1
+];
+
+let trend =
+"STABLE";
+
+if(last > first + 0.05)
+{
+trend = "RISING";
+}
+else if(last < first - 0.05)
+{
+trend = "FALLING";
+}
+
+document.getElementById("voltageTrend")
+.innerHTML =
+trend;
+}
+
+document.getElementById("trendGraph")
+.innerHTML =
+voltageHistory
+.map(v=>"▇")
+.join("");
+}
+
+updateExecutiveDashboard();
+
+setInterval(
+updateExecutiveDashboard,
+3000
+);
