@@ -61,3 +61,11 @@ font-weight:bold;
 color:#ef4444;
 font-weight:bold;
 }
+
+.lcd{
+font-family:monospace;
+background:black;
+color:#00ff00;
+padding:15px;
+border-radius:10px;
+}
