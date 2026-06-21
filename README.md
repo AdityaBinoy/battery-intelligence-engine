@@ -178,6 +178,36 @@ The live dashboard displays:
 - LCD Warning Message
 - Relay Protection Status
 
+# Module 3: Intelligent Embedded HMI & Diagnostic Interface
+
+## Features
+
+- Automatic LCD screen rotation
+- Live battery diagnostics
+- Battery analytics display
+- Protection status monitoring
+- Fault diagnostic visualization
+- Optimized refresh handling
+- Fault-priority screen override
+- Embedded HMI simulation
+
+## HMI Screens
+
+### Battery Data
+Displays live battery metrics.
+
+### Analytics
+Displays imbalance and health analytics.
+
+### Protection
+Displays relay and protection status.
+
+### Diagnostics
+Displays fault information and system state.
+
+### Fault Override Mode
+
+When a critical fault occurs, the HMI automatically overrides normal screen rotation and displays fault information with highest priority.
 ---
 
 ---
